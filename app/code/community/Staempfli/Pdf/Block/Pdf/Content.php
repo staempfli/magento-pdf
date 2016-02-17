@@ -18,11 +18,15 @@
  * @copyright 2016 Staempfli AG (http://www.staempfli.com/)
  * @license   http://opensource.org/licenses/gpl-3.0 GNU General Public License, version 3 (GPLv3)
  */
-class Staempfli_Pdf_Block_Page_Landscape extends Staempfli_Pdf_Block_Abstract
+class Staempfli_Pdf_Block_Pdf_Content extends Staempfli_Pdf_Block_Abstract
 {
+
+    protected $template = 'pdf/content.phtml';
+
+    protected $content = 'test';
+
     protected function _construct()
     {
         parent::_construct();
-        $this->orientation = parent::ORIENTATION_LANDSCAPE;
     }
 }

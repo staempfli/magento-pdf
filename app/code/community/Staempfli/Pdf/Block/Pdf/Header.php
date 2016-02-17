@@ -18,33 +18,13 @@
  * @copyright 2016 Staempfli AG (http://www.staempfli.com/)
  * @license   http://opensource.org/licenses/gpl-3.0 GNU General Public License, version 3 (GPLv3)
  */
-abstract class Staempfli_Pdf_Model_Abstract extends Mage_Core_Model_Abstract
+class Staempfli_Pdf_Block_Pdf_Header extends Staempfli_Pdf_Block_Abstract
 {
-    const ORIENTATION_PORTRAIT  = 'Portrait';
-    const ORIENTATION_LANDSCAPE = 'Landscape';
 
-    const SIZE_A4       = 'A4';
-    const SIZE_LETTER   = 'letter';
-
-    const LOG_FILE      = 'pdf.log';
-
-    /**
-     * @var \mikehaertl\wkhtmlto\Pdf
-     */
-    protected $pdf;
+    protected $template = 'pdf/header.phtml';
 
     protected function _construct()
     {
-        Mage::dispatchEvent('composer_autoload', array('web2print' => $this));
-        $this->pdf = new \mikehaertl\wkhtmlto\Pdf();
-    }
-
-    /**
-     * @param $message
-     * @param int $level
-     */
-    public function log($message, $level = Zend_Log::ERR)
-    {
-        Mage::log($message, $level, self::LOG_FILE);
+        parent::_construct();
     }
 }

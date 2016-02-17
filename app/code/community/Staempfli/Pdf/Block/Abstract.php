@@ -20,15 +20,6 @@
  */
 abstract class Staempfli_Pdf_Block_Abstract extends Mage_Core_Block_Template
 {
-    const ORIENTATION_PORTRAIT = 'portrait';
-    const ORIENTATION_LANDSCAPE = 'landscape';
-
-
-    /**
-     * @var string
-     */
-    protected $orientation;
-
     /**
      * @var string
      */
@@ -49,10 +40,17 @@ abstract class Staempfli_Pdf_Block_Abstract extends Mage_Core_Block_Template
      */
     protected $language;
 
+    /**
+     * @var string
+     */
+    protected $template;
+
     protected function _construct()
     {
         parent::_construct();
-        $this->setTemplate('pdf/' . $this->orientation . '.phtml');
+        $this->setTemplate($this->template);
+        $this->setTitle('Staempfli PDF Generator');
+        $this->setContent('No content set!');
         $this->setStylesheets(array(
             'default' => Mage::getBaseDir('base') . '/skin/frontend/base/default/pdf/css/default.css'
         ));
@@ -103,7 +101,10 @@ abstract class Staempfli_Pdf_Block_Abstract extends Mage_Core_Block_Template
      */
     public function getLanguage()
     {
-        return $this->language;
+        if($this->language) {
+            return $this->language;
+        }
+        return substr(Mage::app()->getLocale()->getLocaleCode(), 0, 2);
     }
 
     /**

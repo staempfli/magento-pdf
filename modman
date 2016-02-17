@@ -4,9 +4,8 @@ app/code/community/Staempfli/Pdf            app/code/community/Staempfli/Pdf
 # app/etc
 app/etc/modules/Staempfli_Pdf.xml            app/etc/modules/Staempfli_Pdf.xml
 # app/design
+app/design/frontend/base/default/template/pdf/content.phtml            app/design/frontend/base/default/template/pdf/content.phtml
 app/design/frontend/base/default/template/pdf/footer.phtml            app/design/frontend/base/default/template/pdf/footer.phtml
 app/design/frontend/base/default/template/pdf/header.phtml            app/design/frontend/base/default/template/pdf/header.phtml
-app/design/frontend/base/default/template/pdf/landscape.phtml            app/design/frontend/base/default/template/pdf/landscape.phtml
-app/design/frontend/base/default/template/pdf/portrait.phtml            app/design/frontend/base/default/template/pdf/portrait.phtml
 # skin
 skin/frontend/base/default/pdf/css/default.css            skin/frontend/base/default/pdf/css/default.css
