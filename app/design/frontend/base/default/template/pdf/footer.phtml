@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="<?php echo $this->getLanguage(); ?>">
+<head>
+    <meta charset="utf-8">
+    <title><?php echo $this->getTitle(); ?></title>
+    <?php foreach($this->getStylesheets() as $stylesheet): ?>
+        <link rel="stylesheet" href="<?php echo $stylesheet; ?>" />
+    <?php endforeach; ?>
+</head>
+<body>
+<?php echo $this->getContent(); ?>
+</body>
+</html>

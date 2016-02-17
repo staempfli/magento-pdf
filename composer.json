@@ -1,0 +1,12 @@
+{
+  "name":"staempfli/staempfli-pdf",
+  "type":"magento-module",
+  "description": "Staempfli Pdf",
+  "license": ["GPL-3.0"],
+  "require":{
+    "mikehaertl/phpwkhtmltopdf": "2.1.0"
+  },
+  "suggest":{
+    "magento-hackathon/magento-composer-installer":"^2.0"
+  }
+}
