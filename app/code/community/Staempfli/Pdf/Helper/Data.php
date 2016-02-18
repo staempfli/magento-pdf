@@ -20,4 +20,56 @@
  */
 class Staempfli_Pdf_Helper_Data extends Mage_Core_Helper_Abstract
 {
+    /**
+     * @param $file
+     * @return array
+     */
+    public function getSvgDimensions($file)
+    {
+        $width = 0;
+        $height = 0;
+        $source = '';
+
+        $xml = simplexml_load_file($file);
+        $attributes = $xml->attributes();
+
+
+        if ($attributes->viewBox) {
+            $dimensions = explode(' ', $attributes->viewBox);
+            $width = $dimensions[2];
+            $height = $dimensions[3];
+            $source = 'viewBox';
+        } else {
+            if ($attributes->width && $attributes->height) {
+                $width = (string) $attributes->width;
+                $height = (string) $attributes->height;
+                $source = 'width/height';
+            }
+        }
+
+        return array(
+            'width' => round($width),
+            'height' => round($height),
+            'source' => $source
+        );
+    }
+
+    /**
+     * @param $file
+     * @return string
+     */
+    public function renderSvgImage($file)
+    {
+        $io = new Varien_Io_File();
+        $dimensions = $this->getSvgDimensions($file);
+
+        if ($dimensions) {
+            if (isset($dimensions['source']) && $dimensions['source'] === 'viewBox') {
+                $data = $io->read($file);
+                $data = str_replace('viewBox', 'width="'.$dimensions['width'].'" height="'.$dimensions['height'].'" viewBox', $data);
+                return base64_encode($data);
+            }
+        }
+        return '';
+    }
 }

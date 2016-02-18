@@ -47,4 +47,17 @@ abstract class Staempfli_Pdf_Model_Abstract extends Mage_Core_Model_Abstract
     {
         Mage::log($message, $level, self::LOG_FILE);
     }
+
+    /**
+     * @param $block
+     * @return mixed
+     */
+    public function createBlock($block)
+    {
+        /**
+         * @var $layout Mage_Core_Model_Layout
+         */
+        $layout = Mage::getModel('core/layout');
+        return $layout->createBlock($block);
+    }
 }

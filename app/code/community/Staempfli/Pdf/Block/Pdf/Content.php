@@ -23,8 +23,6 @@ class Staempfli_Pdf_Block_Pdf_Content extends Staempfli_Pdf_Block_Abstract
 
     protected $template = 'pdf/content.phtml';
 
-    protected $content = 'test';
-
     protected function _construct()
     {
         parent::_construct();

@@ -1,4 +1,10 @@
-body, pre {
+html {
+    font-family: sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
     margin: 0;
     padding: 0;
     font: 12pt "Arial";
@@ -8,7 +14,27 @@ body, pre {
     line-height: 15pt;
 }
 
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+main,
+menu,
+nav,
+section,
+summary {
+    display: block;
+    position: relative;
+}
+
 pre {
     white-space: pre-wrap;
     word-wrap: break-word;
+}
+
+strong {
+    font-weight: bold;
 }

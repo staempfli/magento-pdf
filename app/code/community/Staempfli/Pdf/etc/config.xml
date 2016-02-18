@@ -32,24 +32,4 @@
             </composer_autoload>
         </events>
     </global>
-    <frontend>
-        <translate>
-            <modules>
-                <staempfli_pdf>
-                    <files>
-                        <default>Staempfli_Pdf.csv</default>
-                    </files>
-                </staempfli_pdf>
-            </modules>
-        </translate>
-        <routers>
-            <staempfli_pdf>
-                <use>standard</use>
-                <args>
-                    <module>Staempfli_Pdf</module>
-                    <frontName>pdf</frontName>
-                </args>
-            </staempfli_pdf>
-        </routers>
-    </frontend>
 </config>

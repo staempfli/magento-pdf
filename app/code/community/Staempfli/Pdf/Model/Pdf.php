@@ -33,7 +33,7 @@ class Staempfli_Pdf_Model_Pdf extends Staempfli_Pdf_Model_Abstract
      */
     public function setOrientation($orientation = parent::ORIENTATION_PORTRAIT)
     {
-        if(is_string($orientation)
+        if (is_string($orientation)
             && in_array($orientation, array(parent::ORIENTATION_LANDSCAPE, parent::ORIENTATION_PORTRAIT))
         ) {
             $this->pdf->setOptions(array('orientation' => $orientation));
@@ -47,7 +47,7 @@ class Staempfli_Pdf_Model_Pdf extends Staempfli_Pdf_Model_Abstract
      */
     public function setPageSize($pageSize)
     {
-        if(is_string($pageSize) && in_array($pageSize, array(parent::SIZE_A4, parent::SIZE_LETTER))) {
+        if (is_string($pageSize) && in_array($pageSize, array(parent::SIZE_A4, parent::SIZE_LETTER))) {
             $this->pdf->setOptions(array('page-size' => $pageSize));
         }
         return $this;
@@ -59,7 +59,7 @@ class Staempfli_Pdf_Model_Pdf extends Staempfli_Pdf_Model_Abstract
      */
     public function addHeader($header)
     {
-        if(is_string($header)) {
+        if (is_string($header)) {
             $this->pdf->setOptions(array('header-html' => $header));
         }
         return $this;
@@ -71,7 +71,7 @@ class Staempfli_Pdf_Model_Pdf extends Staempfli_Pdf_Model_Abstract
      */
     public function addFooter($footer)
     {
-        if(is_string($footer)) {
+        if (is_string($footer)) {
             $this->pdf->setOptions(array('footer-html' => $footer));
         }
         return $this;
@@ -113,7 +113,7 @@ class Staempfli_Pdf_Model_Pdf extends Staempfli_Pdf_Model_Abstract
      */
     public function savePdf($filename = null)
     {
-        if(!$this->pdf->saveAs($filename)) {
+        if (!$this->pdf->saveAs($filename)) {
             $this->log($this->pdf->getCommand());
             $this->log($this->pdf->getError());
         }
@@ -125,10 +125,9 @@ class Staempfli_Pdf_Model_Pdf extends Staempfli_Pdf_Model_Abstract
      */
     public function downloadPdf($filename = null, $inline = false)
     {
-        if(!$this->pdf->send($filename, $inline)) {
+        if (!$this->pdf->send($filename, $inline)) {
             $this->log($this->pdf->getCommand());
             $this->log($this->pdf->getError());
         }
     }
 }
-

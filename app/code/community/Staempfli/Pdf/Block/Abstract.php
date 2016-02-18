@@ -23,7 +23,7 @@ abstract class Staempfli_Pdf_Block_Abstract extends Mage_Core_Block_Template
     /**
      * @var string
      */
-    protected $content;
+    protected $content = array();
 
     /**
      * @var string
@@ -34,6 +34,11 @@ abstract class Staempfli_Pdf_Block_Abstract extends Mage_Core_Block_Template
      * @var array
      */
     protected $stylesheets = array();
+
+    /**
+     * @var bool
+     */
+    protected $path;
 
     /**
      * @var string
@@ -49,11 +54,9 @@ abstract class Staempfli_Pdf_Block_Abstract extends Mage_Core_Block_Template
     {
         parent::_construct();
         $this->setTemplate($this->template);
-        $this->setTitle('Staempfli PDF Generator');
-        $this->setContent('No content set!');
-        $this->setStylesheets(array(
-            'default' => Mage::getBaseDir('base') . '/skin/frontend/base/default/pdf/css/default.css'
-        ));
+        $this->setTitle('Stämpfli AG - Magento PDF Generator');
+        $this->addStylesheet('/skin/frontend/base/default/pdf/css/default.css');
+        $this->setBasePath(Mage::getBaseDir('base'));
     }
 
     /**
@@ -65,14 +68,82 @@ abstract class Staempfli_Pdf_Block_Abstract extends Mage_Core_Block_Template
     }
 
     /**
-     * @param string $content
+     * @param null $content
+     * @param null $element
+     * @param null $attribute
      * @return $this
      */
-    public function setContent($content)
+    public function addContent($content = null, $element = null, $attribute = null)
     {
-        if (is_string($content)) {
-            $this->content = $content;
+        $prefix = '';
+        $suffix = '';
+
+        if ($element) {
+            $prefix = '<' . $element . $this->_getAttributes($attribute) .'>';
+            $suffix = '</' . $element . '>';
         }
+
+        $this->content[] = $prefix . $content . $suffix;
+        return $this;
+    }
+
+    /**
+     * @param null $id
+     * @return $this
+     */
+    public function addSection($id = null)
+    {
+        $this->addContent('<section id="' . $id . '">');
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function endSection()
+    {
+        $this->addContent('</section>');
+        return $this;
+    }
+
+    /**
+     * @param null $id
+     * @return $this
+     */
+    public function addDiv($id = null)
+    {
+        $this->addContent('<div id="' . $id . '">');
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function endDiv()
+    {
+        $this->addContent('</div>');
+        return $this;
+    }
+
+    /**
+     * @param null $src
+     * @param null $alt
+     * @param null $attribute
+     * @return $this
+     */
+    public function addImage($src = null, $alt = null, $attribute = null)
+    {
+        if (stripos($src, 'base64,') !== false) {
+            $this->addContent('<img src="'. $src . '"  alt="' . $alt . '"' . $this->_getAttributes($attribute) . '/>');
+        } else {
+            $this->addContent('<img src="'. $this->path . $src . '"  alt="' . $alt . '"' . $this->_getAttributes($attribute) . '/>');
+        }
+        return $this;
+    }
+
+    public function addObject($data = null, $attribute = null)
+    {
+        $this->addContent('<object data="'. $this->path . $data . '"' . $this->_getAttributes($attribute) . '/>');
         return $this;
     }
 
@@ -101,7 +172,7 @@ abstract class Staempfli_Pdf_Block_Abstract extends Mage_Core_Block_Template
      */
     public function getLanguage()
     {
-        if($this->language) {
+        if ($this->language) {
             return $this->language;
         }
         return substr(Mage::app()->getLocale()->getLocaleCode(), 0, 2);
@@ -124,18 +195,63 @@ abstract class Staempfli_Pdf_Block_Abstract extends Mage_Core_Block_Template
      */
     public function getStylesheets()
     {
+        if ($this->path) {
+            $data = array();
+            foreach ($this->stylesheets as $key => $file) {
+                $data[$key] =  $this->path . $file;
+            }
+            return $data;
+        }
         return $this->stylesheets;
     }
 
     /**
-     * @param array $stylesheets
+     * @param $stylesheet
      * @return $this
      */
-    public function setStylesheets($stylesheets)
+    public function addStylesheet($stylesheet)
     {
-        if (is_array($stylesheets)) {
-            $this->stylesheets = $stylesheets;
+        if (is_string($stylesheet)) {
+            $this->stylesheets[pathinfo($stylesheet, PATHINFO_FILENAME)] = $stylesheet;
         }
         return $this;
+    }
+
+    /**
+     * @param $path
+     * @return $this
+     */
+    public function setBasePath($path)
+    {
+        $this->path = $path;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBasePath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @param $attribute
+     * @return string
+     */
+    private function _getAttributes($attribute)
+    {
+        $attr = '';
+        if ($attribute) {
+            if (is_string($attribute)) {
+                $attr = ' ' . $attribute;
+            } elseif (is_array($attribute)) {
+                foreach ($attribute as $name => $value) {
+                    $attr .= ' ' . $name . '="' . $value . '"';
+                }
+            }
+        }
+
+        return $attr;
     }
 }
