@@ -20,13 +20,13 @@
  */
 abstract class Staempfli_Pdf_Model_Abstract extends Mage_Core_Model_Abstract
 {
-    const ORIENTATION_PORTRAIT  = 'Portrait';
+    const ORIENTATION_PORTRAIT = 'Portrait';
     const ORIENTATION_LANDSCAPE = 'Landscape';
 
-    const SIZE_A4       = 'A4';
-    const SIZE_LETTER   = 'letter';
+    const SIZE_A4 = 'A4';
+    const SIZE_LETTER = 'letter';
 
-    const LOG_FILE      = 'pdf.log';
+    const LOG_FILE = 'pdf.log';
 
     /**
      * @var \mikehaertl\wkhtmlto\Pdf
@@ -37,6 +37,19 @@ abstract class Staempfli_Pdf_Model_Abstract extends Mage_Core_Model_Abstract
     {
         Mage::dispatchEvent('composer_autoload', array('web2print' => $this));
         $this->pdf = new \mikehaertl\wkhtmlto\Pdf();
+        $this->setTmpDir(Mage::getBaseDir('var') . '/tmp');
+    }
+
+    /**
+     * @param $dir
+     * @throws Exception
+     */
+    public function setTmpDir($dir)
+    {
+        $io = new Varien_Io_File();
+        if ($io->checkAndCreateFolder($dir)) {
+            $this->pdf->tmpDir = $dir;
+        }
     }
 
     /**
