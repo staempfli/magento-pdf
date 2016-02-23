@@ -33,7 +33,7 @@ Now you are ready to add some Content and/or add custom Stylesheets.
 
 **Add a custom Stylesheet:**
 
-    $content  = $pdf->addStylesheet('/skin/frontend/your_theme/default/css/pdf.css');
+    $content->addStylesheet('/skin/frontend/your_theme/default/css/pdf.css');
 
 **Set a Title:**
 
