@@ -70,12 +70,12 @@ Now you are ready to add some Content and/or add custom Stylesheets.
 
     $content->addImage('/skin/frontend/your_theme/default/images/my-logo.svg');
 
-    // With image title
-    $content->addImage('/skin/frontend/your_theme/default/images/my-logo.svg', 'Title');
+	// With image title
+	$content->addImage('/skin/frontend/your_theme/default/images/my-logo.svg', 'Title');
 
 **Now, create a Page based on your Content**
 
-    $pdf->addPage($content->toHtml);
+    $pdf->addPage($content->toHtml());
 
 **Download the PDF:**
 
@@ -84,6 +84,19 @@ Now you are ready to add some Content and/or add custom Stylesheets.
 **Save the PDF:**
 
     $pdf->savePdf('filename.pdf');
+
+**Custom options**
+Setp page size (A4, Letter)
+
+    $pdf->setPageSize('A4');
+
+Set orientation:
+
+    $pdf->setOrientation('Portrait');
+
+Set Temporary Directory:
+
+    $pdf->setTmpDir('/path/to/your/tmp/dir');
 
 Requirements
 ------------
