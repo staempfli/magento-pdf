@@ -1,6 +1,5 @@
 Staempfli PDF
 =============
-Staempfli PDF
 
 Facts
 -----
@@ -11,10 +10,12 @@ Facts
 
 Description
 -----------
+This Module let's you easily create PDF's based on HTML Templates or by using the default Templates and adding the content you want.
 
 Requirements
 ------------
 - PHP >= 5.4.0
+- [wkhtmltopdf](http://wkhtmltopdf.org/downloads.html)
 
 Compatibility
 -------------
