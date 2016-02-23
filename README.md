@@ -86,6 +86,7 @@ Now you are ready to add some Content and/or add custom Stylesheets.
     $pdf->savePdf('filename.pdf');
 
 **Custom options**
+
 Setp page size (A4, Letter)
 
     $pdf->setPageSize('A4');
