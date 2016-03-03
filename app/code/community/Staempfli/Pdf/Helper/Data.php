@@ -22,10 +22,11 @@ class Staempfli_Pdf_Helper_Data extends Mage_Core_Helper_Abstract
 {
     /**
      * @param $file
-     * @param null $minWidth
+     * @param null|int $minWidth
+     * @param bool $fixed
      * @return array
      */
-    public function getSvgDimensions($file, $minWidth = null)
+    public function getSvgDimensions($file, $minWidth = null, $fixed = true)
     {
         $width = 0;
         $height = 0;
@@ -49,9 +50,14 @@ class Staempfli_Pdf_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         if (!is_null($minWidth)) {
-            $ratio = $width / $minWidth;
-            $width = $width / $ratio;
-            $height = $height / $ratio;
+            if ($fixed) {
+                $ratio = $width / $minWidth;
+                $width = $width / $ratio;
+                $height = $height / $ratio;
+            } else {
+                $width = $width + ($width * $minWidth);
+                $height = $height + ($height * $minWidth);
+            }
         }
 
         return array(
