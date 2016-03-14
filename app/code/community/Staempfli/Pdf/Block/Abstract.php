@@ -126,9 +126,9 @@ abstract class Staempfli_Pdf_Block_Abstract extends Mage_Core_Block_Template
     }
 
     /**
-     * @param null $src
-     * @param null $alt
-     * @param null $attribute
+     * @param null|string $src
+     * @param null|string $alt
+     * @param null|array $attribute
      * @return $this
      */
     public function addImage($src = null, $alt = null, $attribute = null)
@@ -136,14 +136,23 @@ abstract class Staempfli_Pdf_Block_Abstract extends Mage_Core_Block_Template
         if (stripos($src, 'base64,') !== false) {
             $this->addContent('<img src="'. $src . '"  alt="' . $alt . '"' . $this->_getAttributes($attribute) . '/>');
         } else {
-            $this->addContent('<img src="'. $this->path . $src . '"  alt="' . $alt . '"' . $this->_getAttributes($attribute) . '/>');
+            $this->addContent('<img src="'. $this->path . str_replace($this->path, '', $src) . '"  alt="' . $alt . '"' . $this->_getAttributes($attribute) . '/>');
         }
         return $this;
     }
 
+    /**
+     * @param null|string $data
+     * @param null|array $attribute
+     * @return $this
+     */
     public function addObject($data = null, $attribute = null)
     {
-        $this->addContent('<object data="'. $this->path . $data . '"' . $this->_getAttributes($attribute) . '/>');
+        if (stripos($data, 'base64,') !== false) {
+            $this->addContent('<object data="'. $data . '" ' . $this->_getAttributes($attribute) . '/></object>');
+        } else {
+            $this->addContent('<object data="'. $this->path . str_replace($this->path, '', $data) . '" ' . $this->_getAttributes($attribute) . '></object>');
+        }
         return $this;
     }
 
