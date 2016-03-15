@@ -113,10 +113,7 @@ class Staempfli_Pdf_Model_Pdf extends Staempfli_Pdf_Model_Abstract
      */
     public function savePdf($filename = null)
     {
-        if (!$this->pdf->saveAs($filename)) {
-            $this->log($this->pdf->getCommand());
-            $this->log($this->pdf->getError());
-        }
+        $this->_storePdf($filename);
     }
 
     /**
@@ -125,9 +122,59 @@ class Staempfli_Pdf_Model_Pdf extends Staempfli_Pdf_Model_Abstract
      */
     public function downloadPdf($filename = null, $inline = false)
     {
-        if (!$this->pdf->send($filename, $inline)) {
+        $this->_storePdf($filename, true, $inline);
+    }
+
+
+    private function _storePdf($filename = '', $download = false, $inline = false)
+    {
+        $io = new Varien_Io_File();
+        $tmpDir = $this->pdf->tmpDir;
+        $result = false;
+
+        if ($this->isCacheEnabled()
+            && $io->fileExists($tmpDir . DS . $filename)
+            && $download === true) {
+            // As the $io->ls() implementation from Magento Core
+            // will list all files it can have a huge performance impact.
+            // So we use a custom check and ignore the Magento coding standard
+            // for this part.
+
+            // @codingStandardsIgnoreStart
+            if ($this->getIsFileCached($filename)) {
+                header('Pragma: public');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                header('Content-Type: application/pdf');
+                header('Content-Transfer-Encoding: binary');
+                header('Content-Length: '.filesize($tmpDir . DS . $filename));
+
+                if ($filename!==null || $inline) {
+                    $disposition = $inline ? 'inline' : 'attachment';
+                    header("Content-Disposition: $disposition; filename=\"$filename\"");
+                }
+
+                readfile($tmpDir . DS . $filename);
+                return true;
+            }
+            // @codingStandardsIgnoreEnd
+        }
+
+        if ($download) {
+            $result = $this->pdf->send($filename, $inline);
+        } else {
+            $result = $this->pdf->saveAs($filename);
+        }
+
+        // Save temporary file
+        $tmpFile = $this->pdf->getPdfFilename();
+        $io->mv($tmpFile, $tmpDir . DS . $filename);
+
+        if (!$result) {
             $this->log($this->pdf->getCommand());
             $this->log($this->pdf->getError());
+            return false;
         }
+        return true;
     }
 }

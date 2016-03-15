@@ -27,11 +27,15 @@ class Staempfli_Pdf_Helper_Data extends Mage_Core_Helper_Abstract
      */
     protected $io;
 
-    protected $media;
+    /**
+     * @var string
+     */
+    protected $tmpDir = '';
 
     public function __construct()
     {
         $this->io = new Varien_Io_File();
+        $this->tmpDir = Mage::getBaseDir('var') . DS . 'tmp';
     }
 
     public function __destruct()
@@ -47,6 +51,14 @@ class Staempfli_Pdf_Helper_Data extends Mage_Core_Helper_Abstract
     public function addFile($file)
     {
         $this->files[] = $file;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTmpDir()
+    {
+        return $this->tmpDir;
     }
 
     /**
@@ -129,9 +141,8 @@ class Staempfli_Pdf_Helper_Data extends Mage_Core_Helper_Abstract
                     }
                 }
                 if ($save) {
-                    $tmp = Mage::getBaseDir('var') . DS . 'tmp';
-                    $this->io->checkAndCreateFolder($tmp);
-                    $file = Mage::getBaseDir('var') . DS . 'tmp' . DS .sha1($data) . '.svg';
+                    $this->io->checkAndCreateFolder($this->tmpDir);
+                    $file = $this->tmpDir . DS .sha1($data) . '.svg';
                     $this->io->write($file, $data);
                     $this->addFile($file);
                     return $file;
@@ -151,10 +162,12 @@ class Staempfli_Pdf_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function createImageFromBase64($data, $type = 'jpeg')
     {
-        $tmp = Mage::getBaseDir('var') . DS . 'tmp';
-        $this->io->checkAndCreateFolder($tmp);
-        $file = $tmp . DS . sha1($data). '.' . $type;
+        $this->io->checkAndCreateFolder($this->tmpDir);
+        $file = $this->tmpDir . DS . sha1($data). '.' . $type;
 
+        // As there is no Magento Core Implementation for this
+        // we ignore the coding standard for this part.
+        // @codingStandardsIgnoreStart
         $res = imagecreatefromstring(base64_decode($data));
 
         switch ($type) {
@@ -173,6 +186,7 @@ class Staempfli_Pdf_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         imagedestroy($res);
+        // @codingStandardsIgnoreEnd
         $this->addFile($file);
         return $file;
     }

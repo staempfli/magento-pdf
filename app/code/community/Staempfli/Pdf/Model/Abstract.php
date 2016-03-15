@@ -33,6 +33,12 @@ abstract class Staempfli_Pdf_Model_Abstract extends Mage_Core_Model_Abstract
      */
     protected $pdf;
 
+    /**
+     * Cache is disabled by default
+     * @var int
+     */
+    protected $cache_lifetime = 0;
+
     protected function _construct()
     {
         Mage::dispatchEvent('composer_autoload', array('web2print' => $this));
@@ -50,6 +56,55 @@ abstract class Staempfli_Pdf_Model_Abstract extends Mage_Core_Model_Abstract
         if ($io->checkAndCreateFolder($dir)) {
             $this->pdf->tmpDir = $dir;
         }
+    }
+
+    /**
+     * Set the cache lifetime in seconds
+     * setting it to 0 will disable the caching
+     *
+     * @param int $time
+     * @return $this
+     */
+    public function setCacheLifetime($time)
+    {
+        if (is_int($time)) {
+            $this->cache_lifetime = $time;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCacheLifetime()
+    {
+        return $this->cache_lifetime;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCacheEnabled()
+    {
+        if ($this->cache_lifetime > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param $filename
+     * @return bool
+     */
+    public function getIsFileCached($filename)
+    {
+        // @codingStandardsIgnoreStart
+        if (file_exists($this->pdf->tmpDir . DS . $filename)) {
+            return !(filemtime($this->pdf->tmpDir . DS . $filename) + $this->getCacheLifetime()) < time();
+        }
+        return false;
+        // @codingStandardsIgnoreEnd
     }
 
     /**
