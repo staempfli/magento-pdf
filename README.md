@@ -3,7 +3,7 @@ Staempfli PDF
 
 Facts
 -----
-- version: 0.1.0
+- version: 0.2.0
 - extension key: Staempfli_Pdf
 - [extension on GitHub](https://github.com/staempfli/magento-pdf)
 - [direct download link](https://github.com/staempfli/magento-pdf/archive/master.zip)
