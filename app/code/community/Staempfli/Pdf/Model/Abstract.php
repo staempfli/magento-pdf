@@ -28,6 +28,8 @@ abstract class Staempfli_Pdf_Model_Abstract extends Mage_Core_Model_Abstract
 
     const LOG_FILE = 'pdf.log';
 
+    const XML_PDF_COMMAND_PATH = 'staempfli/pdf/command';
+
     /**
      * @var \mikehaertl\wkhtmlto\Pdf
      */
@@ -43,7 +45,22 @@ abstract class Staempfli_Pdf_Model_Abstract extends Mage_Core_Model_Abstract
     {
         Mage::dispatchEvent('composer_autoload', array('web2print' => $this));
         $this->pdf = new \mikehaertl\wkhtmlto\Pdf();
+        if ($command = Mage::getStoreConfig(self::XML_PDF_COMMAND_PATH)) {
+            $this->setCommandOptions(array('command' => $command));
+        }
         $this->setTmpDir(Mage::getBaseDir('var') . '/tmp');
+    }
+
+    /**
+     * @param array $options
+     * @return $this
+     */
+    public function setCommandOptions($options = array())
+    {
+        if (is_array($options)) {
+            $this->pdf->commandOptions = $options;
+        }
+        return $this;
     }
 
     /**

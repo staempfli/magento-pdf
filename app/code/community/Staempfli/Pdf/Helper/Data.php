@@ -121,7 +121,9 @@ class Staempfli_Pdf_Helper_Data extends Mage_Core_Helper_Abstract
         $height = $dimensions['height'];
 
         if ($dimensions) {
-            if (isset($dimensions['source']) && $dimensions['source'] === 'viewBox') {
+            if (isset($dimensions['source']) && $dimensions['source'] === 'viewBox'
+            && $this->io->fileExists($file)) {
+                $this->io->cd(Mage::getBaseDir('var'));
                 $data = $this->io->read($file);
                 $data = str_replace('viewBox', 'width="'.$width.'" height="'.$height.'" viewBox', $data);
 

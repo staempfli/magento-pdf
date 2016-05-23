@@ -130,7 +130,6 @@ class Staempfli_Pdf_Model_Pdf extends Staempfli_Pdf_Model_Abstract
     {
         $io = new Varien_Io_File();
         $tmpDir = $this->pdf->tmpDir;
-        $result = false;
 
         if ($this->isCacheEnabled()
             && $io->fileExists($tmpDir . DS . $filename)

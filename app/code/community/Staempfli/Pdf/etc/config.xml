@@ -32,4 +32,11 @@
             </composer_autoload>
         </events>
     </global>
+    <default>
+        <staempfli>
+            <pdf>
+                <command/>
+            </pdf>
+        </staempfli>
+    </default>
 </config>
