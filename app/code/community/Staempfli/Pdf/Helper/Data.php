@@ -125,9 +125,14 @@ class Staempfli_Pdf_Helper_Data extends Mage_Core_Helper_Abstract
             && $this->io->fileExists($file)) {
                 $this->io->cd(Mage::getBaseDir('var'));
                 $data = $this->io->read($file);
-                $data = str_replace('viewBox', 'width="'.$width.'" height="'.$height.'" viewBox', $data);
+                preg_match('/<svg[^>]*>/', $data, $matches);
+                if(count($matches) > 0) {
+                    $match = $matches[0];
+                    $replace = str_replace('viewBox', 'width="'.$width.'" height="'.$height.'" viewBox', $match);
+                    $data = str_replace($match, $replace, $data);
+                }
 
-                // check for bae64 images
+                // check for base64 images
                 $pattern = "~data:image/[a-zA-Z]*;base64,[a-zA-Z0-9+/=\s]*~";
                 preg_match($pattern, $data, $matches);
 
@@ -149,6 +154,7 @@ class Staempfli_Pdf_Helper_Data extends Mage_Core_Helper_Abstract
                     $this->addFile($file);
                     return $file;
                 }
+
                 return 'data:image/svg+xml;base64,' . base64_encode($data);
             }
         }
